@@ -1,0 +1,35 @@
+.section-header {
+    margin-bottom: 2rem;
+}
+.card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 2rem;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+@media (min-width: 550px) {
+    .card-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (min-width: 750px) {
+    .card-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+.card {
+    display: flex;
+    flex-direction: column;
+    background: tomato;
+    padding: 3rem;
+    border-radius: 5px;
+}
+.card-title {
+    display: flex;
+    margin-bottom: 2rem;
+}
+.card svg {
+    font-size: 4rem;
+    margin-right: 2rem;
+}

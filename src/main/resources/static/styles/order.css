@@ -1,0 +1,69 @@
+.btns-container {
+    display: flex;
+    flex-direction: column;
+}
+.btns-container.hide {
+    display: none;
+}
+.btns-container button:first-child {
+    margin-bottom: 4rem;
+}
+@media (min-width: 450px) {
+    .btns-container {
+        flex-direction: row;
+    }
+    .btns-container button:first-child {
+        margin-bottom: 0;
+        margin-right: 3rem;
+    }
+}
+.order-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 50rem;
+}
+.order-form label {
+    margin: 3rem 0;
+    font-size: 2rem;
+}
+.order-form select {
+    font-size: 1.6rem;
+    background: black;
+    color: white;
+    padding: 1rem;
+    border: 1px solid white;
+}
+.toppings-container {
+    display: flex;
+    flex-direction: column;
+}
+.topping-container {
+    display: flex;
+    align-items: center;
+}
+.topping-container label {
+    margin: 1.5rem 0;
+}
+.topping-container input:first-child {
+    width: 3rem;
+    height: 3rem;
+    accent-color: tomato;
+    border: 1px solid white;
+    color: white;
+    margin-right: 2rem;
+}
+.subtotal-container {
+    display: flex;
+    align-items: center;
+    margin: 5rem 0;
+    background: tomato;
+    max-width: 50rem;
+}
+.subtotal-container > h4:first-child {
+    padding: 1rem;
+    color: black;
+}
+.subtotal-container > h4:last-child {
+    margin-left: 1.5rem;
+    color: white;
+}

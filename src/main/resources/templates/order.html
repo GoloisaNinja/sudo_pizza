@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <div th:replace="head :: head"></div>
+    <link th:href="@{/styles/global.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/order.css}" rel="stylesheet"/>
+    <title>Order Pizza</title>
+</head>
+<body>
+<header class="hero">
+    <h1 class="hero-lead"><span class="tomato-span">Sudo</span> Order</h1>
+    <h2 class="hero-sub">Asking for a token enables order history. Revoke your token to cast your history to the
+        void.</h2>
+    <button id="token-btn" class="tomato-outline-btn hide">Token Please</button>
+    <div id="btns-container" class="btns-container">
+        <button id="history-btn" class="tomato-outline-btn">Order History</button>
+        <button id="revoke-btn" class="tomato-outline-btn">Revoke Token</button>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <h3 id="section-header" class="section-header">npm build pizza</h3>
+        <form id="order-form" class="order-form">
+            <label>Step1: Choose your Pizza</label>
+            <select id="pizza-option">
+                <option id="pizza-option-first" value="" data-price=0>--Select a Pizza--</option>
+            </select>
+            <label>Step2: Add some Toppings ($0.99 ea)</label>
+            <div id="toppings-container" class="toppings-container">
+            </div>
+            <div class="subtotal-container">
+                <h4>Subtotal: </h4>
+                <h4 id="subtotal"></h4>
+            </div>
+            <div class="order-btn-container">
+                <button id="place-order-btn" class="tomato-outline-btn" type="submit" disabled>Place Order!</button>
+            </div>
+        </form>
+    </div>
+</main>
+<div th:replace="footer :: footer"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="module">
+    import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js';
+    import getDate from "../js/copyright.js";
+    //IIFE check which header button should be displayed
+    (async function () {
+        const tokenBtn = document.getElementById("token-btn");
+        const btnsContainer = document.getElementById("btns-container");
+        const pizzaSelectParent = document.getElementById("pizza-option");
+        const toppingsContainer = document.getElementById("toppings-container");
+        if (localStorage.getItem("pizzaToken") === null) {
+            tokenBtn.classList.remove("hide");
+            btnsContainer.classList.add("hide");
+        }
+        const resp = await axios.get("/api/products")
+        resp.data.forEach((product) => {
+            let productElement;
+            if (product.id.startsWith("P")) {
+                productElement = document.createElement("option");
+                productElement.value = product.id;
+                productElement.text = product.description + " - " + product.price;
+                productElement.dataset.price = product.price;
+                pizzaSelectParent.append(productElement);
+            } else {
+                let divElement = document.createElement("div");
+                let labelElement = document.createElement("label");
+                productElement = document.createElement("input");
+                divElement.classList.add("topping-container")
+                labelElement.innerText = product.description;
+                productElement.id = "topping-option";
+                productElement.type = "checkbox";
+                productElement.name = product.id;
+                productElement.dataset.price = product.price;
+                productElement.addEventListener("click", subtotalOrder);
+                divElement.append(productElement);
+                divElement.append(labelElement);
+                toppingsContainer.append(divElement);
+            }
+        })
+    }());
+    // -- DECLARE VARS
+    // ids
+    const orderId = nanoid(6);
+    const pizzaToken = nanoid(6);
+    // elements
+    const btnsContainer = document.getElementById("btns-container");
+    const subTotalElement = document.getElementById("subtotal");
+    const orderForm = document.getElementById("order-form");
+    const copyright = document.getElementById("copyright");
+    // buttons
+    const tokenBtn = document.getElementById("token-btn");
+    const historyBtn = document.getElementById("history-btn");
+    const revokeBtn = document.getElementById("revoke-btn");
+    const placeOrderBtn = document.getElementById("place-order-btn");
+    // order variables
+    const pizzaOption = document.getElementById("pizza-option");
+    let productIds = [];
+    let orderTotal = 0.00;
+    // -- FOOTER DATE
+    copyright.innerHTML = getDate();
+    // -- FUNCTIONS
+    // checks to ensure a pizza type has been selected
+    function isPizzaOkToOrder() {
+        if (pizzaOption.value !== "") {
+            placeOrderBtn.disabled = false;
+        } else if (placeOrderBtn.value === "" && !placeOrderBtn.disabled) {
+            placeOrderBtn.disabled = true;
+        }
+    }
+    //
+    function returnToppingArray() {
+        return document.querySelectorAll("#topping-option");
+    }
+    // subtotals for every order option/select change
+    function subtotalOrder() {
+        let toppings = returnToppingArray();
+        let subtotal = +pizzaOption.options[pizzaOption.selectedIndex].dataset.price;
+        let pIds = [pizzaOption.options[pizzaOption.selectedIndex].value]
+        toppings.forEach((topping) => {
+            if (topping.checked === true) {
+                subtotal += +topping.dataset.price;
+                pIds.push(topping.name)
+            }
+        });
+        productIds = pIds;
+        subTotalElement.innerHTML = subtotal.toFixed(2).toString();
+        orderTotal = subtotal.toFixed(2);
+        isPizzaOkToOrder();
+    }
+    // create customerorder object and send to backend
+    async function placeOrder() {
+        let tokenToUse = localStorage.getItem("pizzaToken");
+        const config = {
+            headers: {
+                "Content-type": "application/json"
+            }
+        };
+        const body = JSON.stringify({
+            order_id: orderId,
+            user_token: tokenToUse,
+            total: orderTotal,
+            productIds
+        });
+        try {
+            const resp = await axios.post("/api/submitOrder", body, config);
+            if (resp.status === 200) {
+                window.location.href = `/orderSummary/${orderId}`;
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    }
+    // -- LISTENERS
+    tokenBtn.addEventListener("click", () => {
+        localStorage.setItem("pizzaToken", pizzaToken);
+        tokenBtn.classList.add("hide");
+        btnsContainer.classList.remove("hide");
+    })
+    historyBtn.addEventListener("click", () => {
+        let tokenToUse = localStorage.getItem("pizzaToken");
+        window.location.href = `/orderHistory/${tokenToUse}`;
+    })
+    revokeBtn.addEventListener("click", () => {
+        localStorage.removeItem("pizzaToken");
+        btnsContainer.classList.add("hide");
+        tokenBtn.classList.remove("hide");
+    })
+    pizzaOption.addEventListener("change", subtotalOrder);
+    orderForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        placeOrder();
+    });
+</script>
+</html>

@@ -1,0 +1,189 @@
+:root {
+    /*Color Vars*/
+    --tomato-hover: #ba4732;
+}
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+    font-family: 'Rubik', sans-serif;
+    color: white;
+}
+html {
+    font-size: 62.5%;
+    line-height: 1.2;
+}
+body {
+    background-color: #000000;
+    color: white;
+}
+/* Links */
+a {
+    text-decoration: none;
+    font-size: 1.4rem;
+    color: tomato;
+}
+/* Buttons */
+button {
+    color: white;
+    padding: 1.5rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    transition: all .4s ease-in-out;
+}
+button:disabled {
+    cursor: not-allowed;
+    opacity: .5;
+}
+.btn-container {
+    display: flex;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+.tomato-outline-btn {
+    border: 3px solid tomato;
+}
+.tomato-outline-btn:hover:not([disabled]) {
+    background: tomato;
+}
+.tomato-btn {
+    background: tomato;
+    color: white;
+}
+.tomato-btn:not(:disabled) .tomato-btn:hover {
+    background: var(--tomato-hover);
+}
+
+/* Text and Spans */
+h1 {
+    font-size: 8rem;
+    font-weight: 800;
+}
+h2 {
+    font-size: 6rem;
+    color: whitesmoke;
+}
+h3 {
+    font-size: 4rem;
+    color: whitesmoke;
+}
+h4 {
+    font-size: 3rem;
+    color: whitesmoke;
+}
+p {
+    font-size: 1.6rem;
+    color: whitesmoke;
+}
+.tomato-span {
+    color: tomato;
+}
+.green-span {
+    color: springgreen;
+}
+.grey-span {
+    color: darkgrey;
+}
+/* Containers */
+.container {
+    padding: 0 2rem;
+}
+/* Hero Defaults */
+.hero {
+    padding: 5rem 2rem;
+}
+.hero-lead {
+    font-size: 10rem;
+    margin-bottom: 2rem;
+}
+.hero-sub {
+    line-height: 1;
+    color: whitesmoke;
+    margin-bottom: 5rem;
+    font-size: 5rem;
+}
+/* Standard hide/show Classes */
+.show {
+    display: block;
+}
+.hide {
+    display: none;
+}
+
+/* Footer Stuff */
+footer {
+    padding: 0 2rem;
+    background: whitesmoke;
+    margin-top: 5rem;
+}
+footer h4 {
+    margin-bottom: 1.2rem;
+    color: black;
+}
+footer a {
+    font-weight: bold;
+    margin-bottom: 1.4rem;
+    color: #d9523b;
+}
+.footer-grid {
+    display: grid;
+    grid-gap: 1.2rem;
+    grid-template-areas:
+        "site"
+        "dev"
+        "social"
+        "copyright";
+    padding-top: 2.5rem;
+}
+@media(min-width: 600px) {
+    .footer-grid {
+        grid-template-areas:
+            "site dev"
+            "social social"
+            "copyright copyright";
+    }
+}
+@media(min-width: 900px) {
+    .footer-grid {
+        grid-template-areas:
+            "site dev social"
+            "copyright copyright copyright";
+    }
+}
+.footer-grid div:not(:last-child) {
+    display: flex;
+    flex-direction: column;
+}
+.site-links-container {
+    grid-area: site;
+}
+.dev-links-container {
+    grid-area: dev;
+}
+.social-links-container {
+    grid-area: social;
+}
+.copyright-container {
+    display: flex;
+    grid-area: copyright;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+.copyright-container svg {
+    vertical-align: top;
+}
+.copyright-container svg > path {
+    color: #d9523b;
+}
+.made-with-line {
+    color: black;
+}
+#copyright {
+    color: #d9523b;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <div th:replace="head :: head"></div>
+    <link th:href="@{/styles/global.css}" rel="stylesheet" />
+    <link th:href="@{/styles/index.css}" rel="stylesheet" />
+    <title>Sudo Pizza</title>
+</head>
+<body>
+    <header class="hero">
+        <h1 class="hero-lead"><span class="tomato-span">Sudo</span> Pizza</h1>
+        <h2 class="hero-sub">Deliciously simple pizza transactions.</h2>
+        <button class="tomato-outline-btn">Get Started</button>
+    </header>
+    <main>
+        <div class="container">
+            <h3 class="section-header">The Idea</h3>
+            <p>The world is complicated. Getting delicious pizza should be simple. It should also be private and secure. That's why we'll never ask you for your name or your payment details. Intrigued? Of course you are, here's how it works:</p>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fa-solid fa-pizza-slice"></i>
+                        <h4>Tasty</h4>
+                    </div>
+                    <p>We believe in delicious affordable pizza for the masses. One nation under Pie, indivisible. Liberty, pepperoni, for all.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fa-solid fa-mask"></i>
+                        <h4>Discreet</h4>
+                    </div>
+                    <p>Data isn't always a good thing. We implement a Discreetza Pizzanonymous system. No cards. No addresses. No Names.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fa-solid fa-robot"></i>
+                        <h4>APM</h4>
+                    </div>
+                    <p>Visit one of our Automated Pizza Machines to retrieve your pizza. All you need is your unique order id and some cash.</p>
+                </div>
+            </div>
+            <h3 class="section-header">Go Incognit Dough</h3>
+            <p>It's pretty simple. Choose a size, choose your toppings. Place your order. We'll give you a UUID to use at one of our APM's (automated pizza machines). All pizzas are ready in 15 minutes. Always. Insert your cash - take your pie. That's it. We'll use your internet session to bring up past orders. Turn off this feature anytime. Your privacy matters. So go on. Have a snaccident, with Sudo Pizza.</p>
+            <div class="btn-container">
+                <button class="tomato-outline-btn">Get Started</button>
+            </div>
+        </div>
+    </main>
+    <div th:replace="footer :: footer"></div>
+</body>
+<script type="module">
+    import getDate from "../js/copyright.js";
+    const copyright = document.getElementById("copyright");
+    copyright.innerHTML = getDate();
+    function navigateToOrder() {
+        window.location.href = "/order";
+    }
+    const orderBtns = document.querySelectorAll("button");
+    orderBtns.forEach((el) => el.addEventListener('click', () => navigateToOrder()))
+</script>
+</html>

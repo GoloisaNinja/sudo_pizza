@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <div th:replace="head :: head"></div>
+    <link th:href="@{/styles/global.css}" rel="stylesheet" />
+    <link th:href="@{/styles/history.css}" rel="stylesheet" />
+    <title>Order History</title>
+</head>
+<body>
+<header class="hero">
+    <h1 class="hero-lead"><span class="tomato-span">All</span> Orders</h1>
+    <h2 class="hero-sub">Sudo Pizza makes hunger history.</h2>
+    <button id="go-back" class="tomato-outline-btn">go back</button>
+</header>
+<main>
+    <div class="container">
+        <h3 th:text="${#lists.size(customerOrders) > 0}? 'Click an Order ID to see details.' : 'Nothing to see here. Go back and create an order to see your history here.'">Click an Order ID to see details.</h3>
+        <table th:if="${#lists.size(customerOrders) > 0}" class="standard-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>User ID</th>
+                    <th>Order Total</th>
+                    <th>Ordered On</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="order : ${customerOrders}">
+                    <td><a class="order-link" th:text="${order.getOrder_id()}" th:href="'/orderSummary/' + ${order.getOrder_id()}"></a></td>
+                    <td th:text="${order.getUser_token()}"></td>
+                    <td th:text="${order.getTotal()}"></td>
+                    <td th:text="${order.getCreated_on()}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<div th:replace="footer :: footer"></div>
+</body>
+<script type="module">
+    import getDate from "../js/copyright.js";
+    const copyright = document.getElementById("copyright");
+    copyright.innerHTML = getDate();
+    const goBackBtn = document.getElementById("go-back");
+    goBackBtn.addEventListener("click", () => {
+        history.go(-1);
+    })
+</script>
+</html>

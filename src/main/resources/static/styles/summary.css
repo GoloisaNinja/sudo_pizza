@@ -1,0 +1,47 @@
+.summary-container {
+    margin-top: 5rem;
+    border: 3px solid tomato;
+    border-radius: 5px;
+    max-width: 500px;
+    padding: 2rem;
+}
+.detail {
+    margin-bottom: 2rem;
+}
+.item-table {
+    margin-top: 2rem;
+    width: 100%;
+}
+.item-table tr, td {
+    padding: 1rem 0.5rem;
+}
+.heading-row {
+    background: whitesmoke;
+}
+.heading-row td {
+    color: black;
+}
+.heading-row td:last-child, .item-row td:last-child {
+    text-align: right;
+}
+.heading {
+    font-size: 2rem;
+    font-weight: bold;
+}
+.item {
+    font-size: 1.8rem;
+}
+.item-row td {
+    border-bottom: 3px solid tomato;
+}
+.total {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5rem;
+    width: 100%;
+    background: tomato;
+    padding: 1rem;
+}
+.total-text {
+    color: black;
+}

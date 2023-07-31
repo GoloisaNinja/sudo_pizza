@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <div th:replace="head :: head"></div>
+    <link th:href="@{/styles/global.css}" rel="stylesheet" />
+    <link th:href="@{/styles/summary.css}" rel="stylesheet" />
+    <title>Order Summary</title>
+</head>
+<body>
+<header class="hero">
+    <h1 class="hero-lead"><span class="tomato-span">Hot</span> Stuff</h1>
+    <h2 class="hero-sub">We received your order!</h2>
+    <button id="go-back" class="tomato-outline-btn">go back</button>
+</header>
+<main>
+    <div class="container">
+        <h3>Order Summary</h3>
+        <div class="summary-container">
+            <h4>Order Id</h4>
+            <p class="detail" th:text="${order.order_id}"></p>
+            <h4>Ordered On</h4>
+            <p class="detail" th:text="${order.created_on}"></p>
+            <h4>Items</h4>
+            <div class="summary-items">
+                <table class="item-table">
+                    <tr class="heading-row">
+                        <td class="heading">Description</td>
+                        <td class="heading">Amount</td>
+                    </tr>
+                    <tr class="item-row" th:each="item : ${items}">
+                        <td class="item" th:text="${item.getProduct().getDescription()}"></td>
+                        <td class="item" th:text="${item.getProduct().getPrice()}"></td>
+                    </tr>
+                </table>
+                <div class="total">
+                    <h4 class="total-text" th:text="'Total: $'+${order.total}"></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="footer :: footer"></div>
+</body>
+<script type="module">
+    import getDate from "../js/copyright.js";
+    const copyright = document.getElementById("copyright");
+    copyright.innerHTML = getDate();
+    const goBackBtn = document.getElementById("go-back");
+    goBackBtn.addEventListener("click", () => {
+        history.go(-1);
+    })
+</script>
+</html>
