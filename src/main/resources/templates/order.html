@@ -82,7 +82,6 @@
     }());
     // -- DECLARE VARS
     // ids
-    const orderId = nanoid(6);
     const pizzaToken = nanoid(6);
     // elements
     const btnsContainer = document.getElementById("btns-container");
@@ -132,6 +131,7 @@
     // create customerorder object and send to backend
     async function placeOrder() {
         let tokenToUse = localStorage.getItem("pizzaToken");
+        const orderId = nanoid(6);
         const config = {
             headers: {
                 "Content-type": "application/json"
