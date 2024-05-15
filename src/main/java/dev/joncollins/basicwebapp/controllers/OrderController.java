@@ -10,9 +10,11 @@ import dev.joncollins.basicwebapp.repositories.ProductRepository;
 import dev.joncollins.basicwebapp.services.OrderServices;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,6 +42,10 @@ public class OrderController {
         CustomerOrder order = new CustomerOrder(orderReq.getOrder_id(), orderReq.getUser_token(),
                                                 null, orderReq.getTotal());
         try {
+            System.out.println(orderReq.IsAPizza());
+            if (!orderReq.IsAPizza()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
             orderRepo.save(order);
             orderServices.saveOrderProductDetails(order.getOrder_id(), orderReq.getProductIds());
             return ResponseEntity.ok("order success");
@@ -58,7 +64,7 @@ public class OrderController {
     }
 
     @GetMapping("/orderHistory/{userId}")
-    public ModelAndView orderHisory(@PathVariable String userId) {
+    public ModelAndView orderHistory(@PathVariable String userId) {
         ModelAndView mav = new ModelAndView("order-history");
         List<CustomerOrder> orders = orderRepo.findAllOrdersByUserId(userId, Sort.by(Sort.Direction.DESC, "created_on"));
         mav.addObject("customerOrders", orders);

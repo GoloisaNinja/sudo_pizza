@@ -13,4 +13,8 @@ public class SubmitOrderRequest {
     private String user_token;
     private double total;
     private List<String> productIds;
+
+    public boolean IsAPizza() {
+        return productIds.stream().anyMatch(id -> id.startsWith("P"));
+    }
 }

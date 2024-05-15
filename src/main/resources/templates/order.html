@@ -55,7 +55,7 @@
             btnsContainer.classList.add("hide");
         }
         const resp = await axios.get("/api/products")
-        resp.data.forEach((product) => {
+        resp.data.forEach((product,index) => {
             let productElement;
             if (product.id.startsWith("P")) {
                 productElement = document.createElement("option");
@@ -69,7 +69,9 @@
                 productElement = document.createElement("input");
                 divElement.classList.add("topping-container")
                 labelElement.innerText = product.description;
-                productElement.id = "topping-option";
+                labelElement.htmlFor = product.id;
+                productElement.id = product.id;
+                productElement.classList.add("topping-option")
                 productElement.type = "checkbox";
                 productElement.name = product.id;
                 productElement.dataset.price = product.price;
@@ -110,7 +112,7 @@
     }
     //
     function returnToppingArray() {
-        return document.querySelectorAll("#topping-option");
+        return document.querySelectorAll(".topping-option");
     }
     // subtotals for every order option/select change
     function subtotalOrder() {
@@ -127,6 +129,18 @@
         subTotalElement.innerHTML = subtotal.toFixed(2).toString();
         orderTotal = subtotal.toFixed(2);
         isPizzaOkToOrder();
+    }
+    // reset order form upon success response
+    function resetOrderForm() {
+        let toppings = returnToppingArray();
+        let pizzaSelectParent = document.getElementById("pizza-option");
+        toppings.forEach((topping) => {
+            if (topping.checked) {
+                topping.checked = false;
+            }
+        });
+        subTotalElement.innerHTML = "0.00";
+        pizzaSelectParent.value = "";
     }
     // create customerorder object and send to backend
     async function placeOrder() {
@@ -146,10 +160,12 @@
         try {
             const resp = await axios.post("/api/submitOrder", body, config);
             if (resp.status === 200) {
+                resetOrderForm();
                 window.location.href = `/orderSummary/${orderId}`;
             }
         } catch(e) {
             console.log(e)
+            window.alert("Sorry! There was a problem with your order.\n"+e.response.data.message);
         }
     }
     // -- LISTENERS

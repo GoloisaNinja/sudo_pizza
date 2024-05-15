@@ -47,7 +47,7 @@
     copyright.innerHTML = getDate();
     const goBackBtn = document.getElementById("go-back");
     goBackBtn.addEventListener("click", () => {
-        window.location.href = "/order";
+        window.location.href = document.referrer;
     })
 </script>
 </html>
